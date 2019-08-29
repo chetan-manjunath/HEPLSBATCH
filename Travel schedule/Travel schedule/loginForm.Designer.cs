@@ -1,6 +1,6 @@
 ﻿namespace Travel_schedule
 {
-    partial class Form1
+    partial class loginForm
     {
         /// <summary>
         /// Required designer variable.
