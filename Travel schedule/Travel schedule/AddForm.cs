@@ -16,5 +16,20 @@ namespace Travel_schedule
         {
             InitializeComponent();
         }
+
+        private void AddForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Add_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Back_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
