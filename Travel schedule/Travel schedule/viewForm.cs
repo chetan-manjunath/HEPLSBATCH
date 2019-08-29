@@ -16,5 +16,15 @@ namespace Travel_schedule
         {
             InitializeComponent();
         }
+
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
