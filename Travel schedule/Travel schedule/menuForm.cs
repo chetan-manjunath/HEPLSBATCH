@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Travel_schedule
 {
-    public partial class Form1 : Form
+    public partial class menuForm : Form
     {
-        public Form1()
+        public menuForm()
         {
             InitializeComponent();
         }
