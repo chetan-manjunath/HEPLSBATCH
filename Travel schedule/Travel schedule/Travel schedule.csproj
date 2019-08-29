@@ -52,6 +52,7 @@
     <Compile Include="loginForm.Designer.cs">
       <DependentUpon>loginForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="LoiginFailureException.cs" />
     <Compile Include="menuForm.cs">
       <SubType>Form</SubType>
     </Compile>
