@@ -23,10 +23,7 @@ namespace Travel_schedule
         public loginForm()
         {
             InitializeComponent();
-            connectionObj = new SqlConnection(@"Data Source=BLR-PG00MPYX-L;Initial Catalog=Northwind;Integrated Security=True");
-
-            dataAdapterObj = new SqlDataAdapter();
-            selectCommand = new SqlCommand();
+            connectionObj = new SqlConnection(@"Data Source=BLR-PG00MPY1-L;Initial Catalog=TravelScheduleDB;Integrated Security=True");
 
             LoadUsernames();
 
@@ -34,12 +31,12 @@ namespace Travel_schedule
         private void LoadUsernames()
         {
 
-            adapterObj1 = new SqlDataAdapter("select Username from AdminCredentials", connectionObj);
+            adapterObj1 = new SqlDataAdapter("select UserName from LoginCredentials", connectionObj);
             dataSetObj = new DataSet();
             adapterObj1.Fill(dataSetObj);
 
             comboBox1.DataSource = dataSetObj.Tables[0];
-            comboBox1.DisplayMember = "Username";
+            comboBox1.DisplayMember = "UserName";
             comboBox1.ValueMember = "UserName";
 
 
@@ -62,6 +59,8 @@ namespace Travel_schedule
 
         private void validateLogin()
         {
+            dataAdapterObj = new SqlDataAdapter();
+            selectCommand = new SqlCommand();
             parameterObj = new SqlParameter("@Password", textBox1.Text);
             selectCommand.Parameters.Add(parameterObj);
 
@@ -70,7 +69,7 @@ namespace Travel_schedule
 
             connectionObj.Open();
 
-            selectCommand.CommandText = "select count(Username) from AdminCredentials where Username=@Username and passwordd=@Password";
+            selectCommand.CommandText = "select count(UserName) from LoginCredentials where UserName=@Username and Password=@Password";
             selectCommand.Connection = connectionObj;
             dataAdapterObj.SelectCommand = selectCommand;
 
