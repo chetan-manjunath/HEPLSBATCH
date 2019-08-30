@@ -20,3 +20,4 @@ C:\Users\chetan.manjunath\Desktop\HEPLSBATCH\Travel schedule\Travel schedule\obj
 C:\Users\chetan.manjunath\Desktop\HEPLSBATCH\Travel schedule\Travel schedule\obj\Debug\Travel schedule.csproj.CoreCompileInputs.cache
 C:\Users\chetan.manjunath\Desktop\HEPLSBATCH\Travel schedule\Travel schedule\obj\Debug\Travel schedule.exe
 C:\Users\chetan.manjunath\Desktop\HEPLSBATCH\Travel schedule\Travel schedule\obj\Debug\Travel schedule.pdb
+C:\Users\chetan.manjunath\Desktop\HEPLSBATCH\Travel schedule\Travel schedule\obj\Debug\Travel_schedule.editForm.resources
