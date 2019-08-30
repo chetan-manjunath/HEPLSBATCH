@@ -8,11 +8,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Configuration;
 
 namespace Travel_schedule
 {
     public partial class loginForm : Form
     {
+        
         SqlConnection connectionObj;
         SqlDataAdapter dataAdapterObj, adapterObj1;
         SqlCommand selectCommand;
@@ -22,8 +24,9 @@ namespace Travel_schedule
 
         public loginForm()
         {
+            var connectionString = ConfigurationManager.ConnectionStrings["TravelScheduleDB"].ConnectionString;
             InitializeComponent();
-            connectionObj = new SqlConnection(@"Data Source=BLR-PG00MPY1-L;Initial Catalog=TravelScheduleDB;Integrated Security=True");
+            connectionObj = new SqlConnection(@connectionString);
             menuForm MenuObj = new menuForm();
             LoadUsernames();
 

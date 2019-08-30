@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
@@ -22,7 +23,8 @@ namespace Travel_schedule
         public viewForm()
         {
             InitializeComponent();
-            sqlConnectionobj = new SqlConnection(@"Data Source=BLR-JDXDG32-L\SQLSERVER12;Initial Catalog=TravelScheduleDB;User ID=sa;Password=W3lc0m3");
+            var connectionString = ConfigurationManager.ConnectionStrings["TravelScheduleDB"].ConnectionString;
+            sqlConnectionobj = new SqlConnection(@connectionString);
             sqlDataAdapterObj = new SqlDataAdapter();
             sqlDataAdapterObj.SelectCommand = new SqlCommand();
             sqlDataAdapterObj.SelectCommand.CommandText = "select * from EmployeeTravelDetailTable";

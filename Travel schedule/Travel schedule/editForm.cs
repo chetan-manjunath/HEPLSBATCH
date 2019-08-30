@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Configuration;
 
 namespace Travel_schedule
 {
@@ -22,7 +23,8 @@ namespace Travel_schedule
         public editForm()
         {
             InitializeComponent();
-            sqlConnectionObj = new SqlConnection(@"Data Source=BLR-PG00MPY1-L;Initial Catalog=TravelScheduleDB;Integrated Security=True");
+            var connectionString = ConfigurationManager.ConnectionStrings["TravelScheduleDB"].ConnectionString;
+            sqlConnectionObj = new SqlConnection(@connectionString);
             loadPlaces();
         }
 
