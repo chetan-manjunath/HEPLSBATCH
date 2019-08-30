@@ -22,7 +22,7 @@ namespace Travel_schedule
         public editForm()
         {
             InitializeComponent();
-            sqlConnectionObj = new SqlConnection(@"Data Source=BLR-PG00HCSH-L;Initial Catalog=TravelScheduleDB;User ID=sa;Password=W3lc0m3");
+            sqlConnectionObj = new SqlConnection(@"Data Source=BLR-PG00MPY1-L;Initial Catalog=TravelScheduleDB;Integrated Security=True");
             loadPlaces();
         }
 
@@ -30,6 +30,12 @@ namespace Travel_schedule
         {
 
         }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
         public void loadPlaces()
         {
             sqlDataAdapterObj = new SqlDataAdapter();

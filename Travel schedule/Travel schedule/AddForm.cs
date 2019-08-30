@@ -29,7 +29,7 @@ namespace Travel_schedule
 
         private void Back_Click(object sender, EventArgs e)
         {
-
+            this.Close();
         }
     }
 }

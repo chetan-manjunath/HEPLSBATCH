@@ -42,6 +42,7 @@
             this.button1Add.TabIndex = 0;
             this.button1Add.Text = "Add";
             this.button1Add.UseVisualStyleBackColor = true;
+            this.button1Add.Click += new System.EventHandler(this.Button1Add_Click);
             // 
             // button2View
             // 
@@ -51,6 +52,7 @@
             this.button2View.TabIndex = 1;
             this.button2View.Text = "View";
             this.button2View.UseVisualStyleBackColor = true;
+            this.button2View.Click += new System.EventHandler(this.Button2View_Click);
             // 
             // button3Edit
             // 
@@ -60,6 +62,7 @@
             this.button3Edit.TabIndex = 2;
             this.button3Edit.Text = "Edit";
             this.button3Edit.UseVisualStyleBackColor = true;
+            this.button3Edit.Click += new System.EventHandler(this.Button3Edit_Click);
             // 
             // button4SignOut
             // 
@@ -69,6 +72,7 @@
             this.button4SignOut.TabIndex = 3;
             this.button4SignOut.Text = "Sign Out";
             this.button4SignOut.UseVisualStyleBackColor = true;
+            this.button4SignOut.Click += new System.EventHandler(this.Button4SignOut_Click);
             // 
             // menuForm
             // 

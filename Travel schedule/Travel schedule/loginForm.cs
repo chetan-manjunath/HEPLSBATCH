@@ -24,7 +24,7 @@ namespace Travel_schedule
         {
             InitializeComponent();
             connectionObj = new SqlConnection(@"Data Source=BLR-PG00MPY1-L;Initial Catalog=TravelScheduleDB;Integrated Security=True");
-
+            menuForm MenuObj = new menuForm();
             LoadUsernames();
 
         }
@@ -44,11 +44,15 @@ namespace Travel_schedule
 
         private void Button1_Click(object sender, EventArgs e) // Login Button
         {
-           
+            menuForm MenuObj = new menuForm();
             
             try
             {
+                
                 validateLogin();
+                this.Visible = false;
+                DialogResult dr = MenuObj.ShowDialog(this);
+                this.Visible = true;
             }
             catch(LoginFailureException s)
             {
