@@ -99,6 +99,12 @@ namespace Travel_schedule
                 textBox1.Text = "";
             }
             }
+            catch (LoginFailureException e)
+            {
+
+                throw new LoginFailureException(e.Message);
+            }
+
             catch (Exception e)
             {
                 
