@@ -24,12 +24,13 @@ namespace Travel_schedule
         static DateTime arrivalDate;
         static DateTime depatureDate;
         static int employeeID;
-
+        LocalTravelForm LocalObj;
 
 
         public editForm()
         {
             InitializeComponent();
+             LocalObj = new LocalTravelForm();
             sqlConnectionObj = new SqlConnection(@"Data Source=BLR-PG00HCSH-L;Initial Catalog=TravelScheduleDB;User ID=sa;Password=W3lc0m3");
             loadPlaces();
         }
@@ -72,40 +73,74 @@ namespace Travel_schedule
             dataGridView1.DataSource = dataSetObj.Tables[0];
         }
 
-        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            sqlParameterObj1 = new SqlParameter("@driverName", comboBox1.SelectedValue);
-
-        }
+        
 
         private void DateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
             
-            arrivalDate = Convert.ToDateTime(dateTimePicker1.Value);
+            //arrivalDate = Convert.ToDateTime(dateTimePicker1.Value);
         }
 
         private void DateTimePicker2_ValueChanged(object sender, EventArgs e)
         {
             
-            depatureDate = Convert.ToDateTime(dateTimePicker2.Value);
+            //depatureDate = Convert.ToDateTime(dateTimePicker2.Value);
+        }
+
+        private void EditForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Button3_Click(object sender, EventArgs e)
+        {
+            this.Visible = false;
+            DialogResult dr = LocalObj.ShowDialog(this);
+            this.Visible = true;
+        }
+
+        private void Button4_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
 
         private void Button2_Click(object sender, EventArgs e)
         {
-            sqlDataAdapterObj = new SqlDataAdapter();
-            updateCommandObj = new SqlCommand();
-            updateCommandObj.CommandText = "update EmployeeTravelDetails set ArrivalDate=@arrivalDate,DepartureDate=@depatureDate where EmloyeeID=@employeeId";
-            updateCommandObj.Connection = sqlConnectionObj;
-            sqlParameterObj2 = new SqlParameter("@arrivalDate", arrivalDate);
-            sqlParameterObj3 = new SqlParameter("@depatureDate", depatureDate);
-            sqlParameterObj = new SqlParameter("@employeeId", employeeID);
-            updateCommandObj.Parameters.Add(sqlParameterObj2);
-            updateCommandObj.Parameters.Add(sqlParameterObj3);
-            updateCommandObj.Parameters.Add(sqlParameterObj);
-            sqlDataAdapterObj.SelectCommand = selectCommandObj;
-            sqlConnectionObj.Open();
-            updateCommandObj.ExecuteNonQuery();
-            sqlConnectionObj.Close();
+            //TimeSpan result = dateTimePicker2.Value.Subtract(dateTimePicker1.Value);
+            //double date = result.TotalDays;
+            double date = dateTimePicker2.Value.Subtract(dateTimePicker1.Value).TotalDays;
+            if (date > 0)
+            {
+                try
+                {
+                    sqlDataAdapterObj = new SqlDataAdapter();
+                    updateCommandObj = new SqlCommand();
+                    updateCommandObj.CommandText = "update EmployeeTravelDetails set ArrivalDate=@arrivalDate,DepartureDate=@depatureDate where EmloyeeID=@employeeId";
+                    updateCommandObj.Connection = sqlConnectionObj;
+                    sqlParameterObj2 = new SqlParameter("@arrivalDate", Convert.ToDateTime(dateTimePicker1.Value));
+                    sqlParameterObj3 = new SqlParameter("@depatureDate", Convert.ToDateTime(dateTimePicker2.Value));
+                    sqlParameterObj = new SqlParameter("@employeeId", employeeID);
+                    updateCommandObj.Parameters.Add(sqlParameterObj2);
+                    updateCommandObj.Parameters.Add(sqlParameterObj3);
+                    updateCommandObj.Parameters.Add(sqlParameterObj);
+
+                    sqlDataAdapterObj.SelectCommand = selectCommandObj;
+              
+                    sqlConnectionObj.Open();
+                    updateCommandObj.ExecuteNonQuery();
+                    ComboBox4_SelectedIndexChanged(sender, e);
+                }
+                catch (Exception er) { MessageBox.Show("Select the employee first");
+                    ComboBox4_SelectedIndexChanged(sender, e);
+                }
+                sqlConnectionObj.Close();
+            }
+            else
+            {
+                MessageBox.Show("Please select the correct departure date");
+                ComboBox4_SelectedIndexChanged(sender, e);
+            }
+           
 
         }
 
