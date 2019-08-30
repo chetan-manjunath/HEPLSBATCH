@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Configuration;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Travel_schedule
 {
@@ -28,6 +29,7 @@ namespace Travel_schedule
             InitializeComponent();
             connectionObj = new SqlConnection(@connectionString);
             menuForm MenuObj = new menuForm();
+            textBox1.PasswordChar = '*';
             LoadUsernames();
 
         }
