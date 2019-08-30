@@ -23,14 +23,15 @@ namespace Travel_schedule
           SqlParameter sqlParameterObj3;
         static DateTime arrivalDate;
         static DateTime depatureDate;
-        static int employeeID;
+       int employeeID,TravelID;
         LocalTravelForm LocalObj;
+
 
 
         public editForm()
         {
             InitializeComponent();
-             LocalObj = new LocalTravelForm();
+            LocalTravelForm LocalObj;
             sqlConnectionObj = new SqlConnection(@"Data Source=BLR-PG00HCSH-L;Initial Catalog=TravelScheduleDB;User ID=sa;Password=W3lc0m3");
             loadPlaces();
         }
@@ -62,8 +63,9 @@ namespace Travel_schedule
             selectCommandObj = new SqlCommand();
             sqlParameterObj = new SqlParameter("@employeeID", dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString());
             //MessageBox.Show(dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString());
-            selectCommandObj.CommandText = "select * from EmployeeTravelDetails where EmloyeeID=@employeeID";
+            selectCommandObj.CommandText = "select * from EmployeeTravelDetails where EmployeeID=@employeeID";
             employeeID = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[1].Value);
+            TravelID= Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[0].Value);
             selectCommandObj.Connection = sqlConnectionObj;
             //MessageBox.Show(sqlParameterObj.Value.ToString());
             selectCommandObj.Parameters.Add(sqlParameterObj);
@@ -94,6 +96,7 @@ namespace Travel_schedule
 
         private void Button3_Click(object sender, EventArgs e)
         {
+            LocalObj = new LocalTravelForm(this.TravelID);
             this.Visible = false;
             DialogResult dr = LocalObj.ShowDialog(this);
             this.Visible = true;
@@ -102,6 +105,11 @@ namespace Travel_schedule
         private void Button4_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void DataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
 
         private void Button2_Click(object sender, EventArgs e)
@@ -115,7 +123,7 @@ namespace Travel_schedule
                 {
                     sqlDataAdapterObj = new SqlDataAdapter();
                     updateCommandObj = new SqlCommand();
-                    updateCommandObj.CommandText = "update EmployeeTravelDetails set ArrivalDate=@arrivalDate,DepartureDate=@depatureDate where EmloyeeID=@employeeId";
+                    updateCommandObj.CommandText = "update EmployeeTravelDetails set ArrivalDate=@arrivalDate,DepartureDate=@depatureDate where EmployeeID=@employeeId";
                     updateCommandObj.Connection = sqlConnectionObj;
                     sqlParameterObj2 = new SqlParameter("@arrivalDate", Convert.ToDateTime(dateTimePicker1.Value));
                     sqlParameterObj3 = new SqlParameter("@depatureDate", Convert.ToDateTime(dateTimePicker2.Value));
