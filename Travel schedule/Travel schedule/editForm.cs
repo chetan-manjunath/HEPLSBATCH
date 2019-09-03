@@ -46,8 +46,7 @@ namespace Travel_schedule
             selectCommandObj.Connection = sqlConnectionObj;
             sqlParameterObj = new SqlParameter("@placename", comboBox4.SelectedValue);
             selectCommandObj.Parameters.Add(sqlParameterObj);
-            sqlDataAdapterObj.SelectCommand = selectCommandObj;
-            
+            sqlDataAdapterObj.SelectCommand = selectCommandObj;   
             dataSetObj = new DataSet();
             sqlDataAdapterObj.Fill(dataSetObj);
             dataGridView1.DataSource = dataSetObj.Tables[0];
@@ -119,17 +118,19 @@ namespace Travel_schedule
             //TimeSpan result = dateTimePicker2.Value.Subtract(dateTimePicker1.Value);
             //double date = result.TotalDays;
             double date = dateTimePicker2.Value.Subtract(dateTimePicker1.Value).TotalDays;
-            if (date > 0)
+            double date1 = dateTimePicker1.Value.Subtract(DateTime.Now).TotalDays;
+            double date2 = dateTimePicker2.Value.Subtract(DateTime.Now).TotalDays;
+            if (date >= 0 && date1>=0 && date2>=0)
             {
                 try
                 {
                     sqlDataAdapterObj = new SqlDataAdapter();
                     updateCommandObj = new SqlCommand();
-                    updateCommandObj.CommandText = "update EmployeeTravelDetails set ArrivalDate=@arrivalDate,DepartureDate=@depatureDate where EmployeeID=@employeeId";
+                    updateCommandObj.CommandText = "update EmployeeTravelDetails set ArrivalDate=@arrivalDate,DepartureDate=@depatureDate where TravelID=@TravelID";
                     updateCommandObj.Connection = sqlConnectionObj;
                     sqlParameterObj2 = new SqlParameter("@arrivalDate", Convert.ToDateTime(dateTimePicker1.Value));
                     sqlParameterObj3 = new SqlParameter("@depatureDate", Convert.ToDateTime(dateTimePicker2.Value));
-                    sqlParameterObj = new SqlParameter("@employeeId", employeeID);
+                    sqlParameterObj = new SqlParameter("@TravelID", TravelID);
                     updateCommandObj.Parameters.Add(sqlParameterObj2);
                     updateCommandObj.Parameters.Add(sqlParameterObj3);
                     updateCommandObj.Parameters.Add(sqlParameterObj);
@@ -147,7 +148,10 @@ namespace Travel_schedule
             }
             else
             {
-                MessageBox.Show("Please select the correct departure date");
+                if(date<0 || date2<0)
+                    MessageBox.Show("Please select the correct departure date");
+                else if(date1<0)
+                    MessageBox.Show("Please select the correct arrival date");
                 ComboBox4_SelectedIndexChanged(sender, e);
             }
            
