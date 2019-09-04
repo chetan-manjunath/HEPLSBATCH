@@ -105,7 +105,7 @@ namespace Travel_schedule
             finally
             {
                 sqlConnectionObj.Close();
-                Scheduledetails(TravelID);
+                dataGridView1.Refresh();
             }
         }
 
@@ -131,7 +131,7 @@ namespace Travel_schedule
             finally
             {
                 sqlConnectionObj.Close();
-                Scheduledetails(TravelID);
+                dataGridView1.Refresh();
             }
         }
 
@@ -156,7 +156,7 @@ namespace Travel_schedule
             catch (Exception ex) {  }
             finally { sqlConnectionObj.Close();
                 Scheduledetails(TravelID);
-                placeFromValidation();
+                dataGridView1.Refresh();
             }
             
             
@@ -184,7 +184,7 @@ namespace Travel_schedule
             finally
             {
                 sqlConnectionObj.Close();
-                Scheduledetails(TravelID);
+                dataGridView1.Refresh();
             }
         }
 
@@ -192,7 +192,7 @@ namespace Travel_schedule
         {
             sqlDataAdapterObj = new SqlDataAdapter();
             selectCommandObj = new SqlCommand();
-            selectCommandObj.CommandText = "SELECT LocalSchedule.SerialNumber,LocalSchedule.TravelID,LocalSchedule.Date,Status.State as Travel_State,l.Place as destination ,l1.Place as source,LocalSchedule.DriverID from LocalSchedule,LocalTravelOptions l, LocalTravelOptions l1 ,Status where l.LocationID = LocalSchedule.FromLocalLocationID and l1.LocationID = LocalSchedule.ToLocalLocationID and LocalSchedule.TravelID = @Id and LocalSchedule.StatusID = Status.StatusID";
+            selectCommandObj.CommandText = "SELECT LocalSchedule.SerialNumber,LocalSchedule.TravelID,LocalSchedule.Date,Status.State as Travel_State,l.Place as source ,l1.Place as  destination,LocalSchedule.DriverID from LocalSchedule,LocalTravelOptions l, LocalTravelOptions l1 ,Status where l.LocationID = LocalSchedule.FromLocalLocationID and l1.LocationID = LocalSchedule.ToLocalLocationID and LocalSchedule.TravelID = @Id and LocalSchedule.StatusID = Status.StatusID";
             selectCommandObj.Connection = sqlConnectionObj;
             sqlParameterObj = new SqlParameter("@Id", id);
             selectCommandObj.Parameters.Add(sqlParameterObj);
