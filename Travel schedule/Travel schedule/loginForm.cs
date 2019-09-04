@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Configuration;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Travel_schedule
 {
@@ -28,6 +29,7 @@ namespace Travel_schedule
             InitializeComponent();
             connectionObj = new SqlConnection(@connectionString);
             menuForm MenuObj = new menuForm();
+            textBox1.PasswordChar = '*';
             LoadUsernames();
 
         }
@@ -70,10 +72,11 @@ namespace Travel_schedule
             selectCommand = new SqlCommand();
             parameterObj = new SqlParameter("@Password", textBox1.Text);
             selectCommand.Parameters.Add(parameterObj);
-
-            parameterObj1 = new SqlParameter("@Username", comboBox1.SelectedValue.ToString());
-            selectCommand.Parameters.Add(parameterObj1);
-
+            try
+            {
+                parameterObj1 = new SqlParameter("@Username", comboBox1.SelectedValue.ToString());
+                selectCommand.Parameters.Add(parameterObj1);
+            
             connectionObj.Open();
 
             selectCommand.CommandText = "select count(UserName) from LoginCredentials where UserName=@Username and Password=@Password";
@@ -82,8 +85,10 @@ namespace Travel_schedule
 
             dataSetObj = new DataSet();
             dataAdapterObj.Fill(dataSetObj);
+            
 
             var LoginStatus = (int)dataSetObj.Tables[0].Rows[0][0];
+            
 
             connectionObj.Close();
             if (LoginStatus <= 0)
@@ -93,8 +98,21 @@ namespace Travel_schedule
             else
             {
                 MessageBox.Show("Login Success");
+                textBox1.Text = "";
             }
-            
+            }
+            catch (LoginFailureException e)
+            {
+
+                throw new LoginFailureException(e.Message);
+            }
+
+            catch (Exception e)
+            {
+                
+                throw new LoginFailureException("Select  a valid user name please dont enter");
+            }
+
         }
 
         private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)

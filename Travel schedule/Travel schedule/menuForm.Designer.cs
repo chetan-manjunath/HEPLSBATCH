@@ -101,7 +101,7 @@
             this.label2.Size = new System.Drawing.Size(119, 25);
             this.label2.TabIndex = 5;
             this.label2.Text = "Welcome...";
-            this.label2.Click += new System.EventHandler(this.Label2_Click);
+            //this.label2.Click += new System.EventHandler(this.Label2_Click);
             // 
             // label3
             // 

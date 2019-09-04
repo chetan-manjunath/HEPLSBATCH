@@ -50,10 +50,5 @@ namespace Travel_schedule
         {
             this.Close();
         }
-
-        private void Label2_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }
