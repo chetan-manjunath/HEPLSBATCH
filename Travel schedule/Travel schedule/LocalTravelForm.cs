@@ -33,7 +33,7 @@ namespace Travel_schedule
         private void DateTimePicker2_ValueChanged(object sender, EventArgs e)
         {
             double date1 = dateTimePicker2.Value.Subtract(DateTime.Now).TotalDays;
-            if (date1 >= 0)
+            if (date1 > -1)
             {
                 try
                 {
@@ -45,10 +45,7 @@ namespace Travel_schedule
                     sqlParameterObj = new SqlParameter("@TravelID", SerialNumber);
                     updateCommandObj.Parameters.Add(sqlParameterObj);
                     updateCommandObj.Parameters.Add(sqlParameterObj1);
-
-
                     sqlDataAdapterObj.SelectCommand = updateCommandObj;
-
                     sqlConnectionObj.Open();
                     updateCommandObj.ExecuteNonQuery();
                     //ComboBox2_SelectedIndexChanged(sender, e);
@@ -65,12 +62,9 @@ namespace Travel_schedule
                     Scheduledetails(TravelID);
                 }
             }
-            else
-            {
-                
-                    MessageBox.Show("Please select the correct departure date");
-                
-                
+            else 
+            { 
+                    MessageBox.Show("Please select the correct date");
             }
         }
 

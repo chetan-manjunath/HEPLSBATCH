@@ -123,7 +123,7 @@ namespace Travel_schedule
             double date = dateTimePicker2.Value.Subtract(dateTimePicker1.Value).TotalDays;
             double date1 = dateTimePicker1.Value.Subtract(DateTime.Now).TotalDays;
             double date2 = dateTimePicker2.Value.Subtract(DateTime.Now).TotalDays;
-            if (date >= 0 && date1>=0 && date2>=0)
+            if (date > -1 && date1>-1 && date2>-1)
             {
                 try
                 {
