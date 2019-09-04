@@ -42,9 +42,9 @@ namespace Travel_schedule
         {
             sqlDataAdapterObj = new SqlDataAdapter();
             selectCommandObj = new SqlCommand();
-            selectCommandObj.CommandText = "select * from EmployeeTravelDetails as eTD,Places as P where P.PlaceID=eTD.ToPlaceID and P.PlaceName = @placename ";
+            selectCommandObj.CommandText = "select EmployeeTravelDetails.TravelID,EmployeeTravelDetails.EmployeeID,EmployeeTravelDetails.ArrivalDate,EmployeeTravelDetails.DepartureDate,s.State,p1.Placename as Source,P.PlaceName as Destination from EmployeeTravelDetails, Places P,Places p1, Status s where EmployeeTravelDetails.ToPlaceID = @PlaceId and EmployeeTravelDetails.ToPlaceID = P.PlaceID and EmployeeTravelDetails.FromPlaceID = p1.PlaceID and EmployeeTravelDetails.StatusID = s.StatusID";
             selectCommandObj.Connection = sqlConnectionObj;
-            sqlParameterObj = new SqlParameter("@placename", comboBox4.SelectedValue);
+            sqlParameterObj = new SqlParameter("@PlaceId", comboBox4.SelectedValue);
             selectCommandObj.Parameters.Add(sqlParameterObj);
             sqlDataAdapterObj.SelectCommand = selectCommandObj;   
             dataSetObj = new DataSet();
@@ -63,13 +63,16 @@ namespace Travel_schedule
             sqlDataAdapterObj = new SqlDataAdapter();
             selectCommandObj = new SqlCommand();
             sqlParameterObj = new SqlParameter("@employeeID", dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString());
+            selectCommandObj.Parameters.Add(sqlParameterObj);
+            sqlParameterObj1 = new SqlParameter("@toPlaceName", dataGridView1.Rows[e.RowIndex].Cells[6].Value.ToString());
+            selectCommandObj.Parameters.Add(sqlParameterObj1);
             //MessageBox.Show(dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString());
-            selectCommandObj.CommandText = "select * from EmployeeTravelDetails where EmployeeID=@employeeID";
+            selectCommandObj.CommandText = "select EmployeeTravelDetails.TravelID,EmployeeTravelDetails.EmployeeID,EmployeeTravelDetails.ArrivalDate,EmployeeTravelDetails.DepartureDate,s.State,p1.PlaceName as Source,P.Placename as Destination from EmployeeTravelDetails, Places P,Places p1, Status s where EmployeeTravelDetails.ToPlaceID = P.PlaceID and EmployeeTravelDetails.FromPlaceID = p1.PlaceID and EmployeeTravelDetails.StatusID = s.StatusID and EmployeeTravelDetails.EmployeeID = @employeeID and p.PlaceName = @toPlaceName";
             employeeID = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[1].Value);
             TravelID= Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[0].Value);
             selectCommandObj.Connection = sqlConnectionObj;
             //MessageBox.Show(sqlParameterObj.Value.ToString());
-            selectCommandObj.Parameters.Add(sqlParameterObj);
+            
             sqlDataAdapterObj.SelectCommand = selectCommandObj;
             dataSetObj = new DataSet();
             sqlDataAdapterObj.Fill(dataSetObj);
@@ -162,7 +165,7 @@ namespace Travel_schedule
         {
             sqlDataAdapterObj = new SqlDataAdapter();
             selectCommandObj = new SqlCommand();
-            selectCommandObj.CommandText = "select Distinct PlaceName from Places";
+            selectCommandObj.CommandText = "select * from Places";
             selectCommandObj.Connection = sqlConnectionObj;
             sqlDataAdapterObj.SelectCommand = selectCommandObj;
             dataSetObj = new DataSet();
@@ -170,7 +173,7 @@ namespace Travel_schedule
 
             comboBox4.DataSource = dataSetObj.Tables[0];
             comboBox4.DisplayMember = "PlaceName";
-            comboBox4.ValueMember = "PlaceName";
+            comboBox4.ValueMember = "PlaceID";
         }
 
     }
