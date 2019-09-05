@@ -36,6 +36,7 @@ namespace Travel_schedule
             sqlConnectionObj = new SqlConnection(@connectionString);
             ObjController = new contorllerEdit();
             loadPlaces();
+            comboBox4.DropDownStyle = ComboBoxStyle.DropDownList;
         }
 
         private void ComboBox4_SelectedIndexChanged(object sender, EventArgs e)

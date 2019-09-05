@@ -54,7 +54,7 @@ namespace Travel_schedule
         {
             sqlDataAdapterObj = new SqlDataAdapter();
             selectCommandObj = new SqlCommand();
-            string selectedPeriod =(string)comboBox2.SelectedValue;
+            string selectedPeriod =Convert.ToString(comboBox2.SelectedValue);
             
             
             if (selectedPeriod == "Week")

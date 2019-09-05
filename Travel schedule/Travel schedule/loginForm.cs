@@ -32,7 +32,8 @@ namespace Travel_schedule
             textBox1.PasswordChar = '*';
             ObjLogin = new controllerlogin();
             LoadUsernames();
-         
+            comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
+
         }
         private void LoadUsernames()
         {
@@ -40,6 +41,7 @@ namespace Travel_schedule
             dataSetObj1 = ObjLogin.LoadUsernames();
             
             comboBox1.DataSource = dataSetObj1.Tables[0];
+            
             comboBox1.DisplayMember = "UserName";
             comboBox1.ValueMember = "UserName";
 

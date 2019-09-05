@@ -21,13 +21,19 @@ namespace Travel_schedule
         DataSet dataSetObj;
         int TravelID;
         int SerialNumber;
+        controllerLocalschedule ControllerObj;
         public LocalTravelForm(int id)
         {
             InitializeComponent();
             var connectionString = ConfigurationManager.ConnectionStrings["TravelScheduleDB"].ConnectionString;
             sqlConnectionObj = new SqlConnection(@connectionString);
+            ControllerObj = new controllerLocalschedule();
             Scheduledetails(id);
             TravelID = id;
+            comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBox2.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBox3.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBox4.DropDownStyle = ComboBoxStyle.DropDownList;
         }
 
         private void DateTimePicker2_ValueChanged(object sender, EventArgs e)
@@ -37,28 +43,18 @@ namespace Travel_schedule
             {
                 try
                 {
-                    sqlDataAdapterObj = new SqlDataAdapter();
-                    updateCommandObj = new SqlCommand();
-                    updateCommandObj.CommandText = "update LocalSchedule set Date=@depatureDate where SerialNumber=@TravelID";
-                    updateCommandObj.Connection = sqlConnectionObj;
-                    sqlParameterObj1 = new SqlParameter("@depatureDate", Convert.ToDateTime(dateTimePicker2.Value));
-                    sqlParameterObj = new SqlParameter("@TravelID", SerialNumber);
-                    updateCommandObj.Parameters.Add(sqlParameterObj);
-                    updateCommandObj.Parameters.Add(sqlParameterObj1);
-                    sqlDataAdapterObj.SelectCommand = updateCommandObj;
-                    sqlConnectionObj.Open();
-                    updateCommandObj.ExecuteNonQuery();
-                    //ComboBox2_SelectedIndexChanged(sender, e);
+
+                    ControllerObj.DateTimeClick(TravelID,dateTimePicker2.Value);
+                    
 
                 }
                 catch (Exception er)
                 {
-                    MessageBox.Show("catch block is executed");
-                    //ComboBox4_SelectedIndexChanged(sender, e);
+                    MessageBox.Show("Invalid date");
+                    
                 }
                 finally
                 {
-                    sqlConnectionObj.Close();
                     Scheduledetails(TravelID);
                 }
             }
@@ -70,8 +66,7 @@ namespace Travel_schedule
 
         private void DataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            sqlDataAdapterObj = new SqlDataAdapter();
-            selectCommandObj = new SqlCommand();
+            
             SerialNumber= Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[0].Value);
             loadToLocation();
             loadFromLocation();
@@ -87,17 +82,7 @@ namespace Travel_schedule
             try
             {
                 int toLocation = Convert.ToInt32(comboBox2.SelectedValue);
-                sqlDataAdapterObj = new SqlDataAdapter();
-                updateCommandObj = new SqlCommand();
-                sqlParameterObj = new SqlParameter("@Id", toLocation);
-                sqlParameterObj1 = new SqlParameter("@slno", SerialNumber);
-                updateCommandObj.Parameters.Add(sqlParameterObj);
-                updateCommandObj.Parameters.Add(sqlParameterObj1);
-                //MessageBox.Show(fromLocation + "   " + SerialNumber);
-                updateCommandObj.CommandText = "update LocalSchedule set ToLocalLocationID = @Id where SerialNumber=@slno";
-                updateCommandObj.Connection = sqlConnectionObj;
-                sqlConnectionObj.Open();
-                updateCommandObj.ExecuteNonQuery();
+                ControllerObj.Button4Click(toLocation,SerialNumber);
                 placeToValidation();
 
             }
@@ -114,23 +99,11 @@ namespace Travel_schedule
             try
             {
                 int driverID = Convert.ToInt32(comboBox4.SelectedValue);
-                sqlDataAdapterObj = new SqlDataAdapter();
-                updateCommandObj = new SqlCommand();
-                sqlParameterObj = new SqlParameter("@Id", driverID);
-                sqlParameterObj1 = new SqlParameter("@slno", SerialNumber);
-                updateCommandObj.Parameters.Add(sqlParameterObj);
-                updateCommandObj.Parameters.Add(sqlParameterObj1);
-                //MessageBox.Show(fromLocation + "   " + SerialNumber);
-                updateCommandObj.CommandText = "update LocalSchedule set DriverID = @Id where SerialNumber=@slno";
-                updateCommandObj.Connection = sqlConnectionObj;
-                sqlConnectionObj.Open();
-                updateCommandObj.ExecuteNonQuery();
-
+                ControllerObj.Button5Click(driverID, SerialNumber);
             }
             catch (Exception ex) { }
             finally
             {
-                sqlConnectionObj.Close();
                 dataGridView1.Refresh();
             }
         }
@@ -140,21 +113,12 @@ namespace Travel_schedule
             try
             {
                 int fromLocation = Convert.ToInt32(comboBox1.SelectedValue);
-                sqlDataAdapterObj = new SqlDataAdapter();
-                updateCommandObj = new SqlCommand();
-                sqlParameterObj = new SqlParameter("@Id", fromLocation);
-                sqlParameterObj1 = new SqlParameter("@slno", SerialNumber);
-                updateCommandObj.Parameters.Add(sqlParameterObj);
-                updateCommandObj.Parameters.Add(sqlParameterObj1);
-                //MessageBox.Show(fromLocation + "   " + SerialNumber);
-                updateCommandObj.CommandText = "update LocalSchedule set FromLocalLocationID = @Id where SerialNumber=@slno";
-                updateCommandObj.Connection = sqlConnectionObj;
-                sqlConnectionObj.Open();
-                updateCommandObj.ExecuteNonQuery();
-                
+                ControllerObj.Button1Click(fromLocation, SerialNumber);
+                placeFromValidation();
             }
-            catch (Exception ex) {  }
-            finally { sqlConnectionObj.Close();
+            catch (Exception ex) { }
+            finally
+            {
                 Scheduledetails(TravelID);
                 dataGridView1.Refresh();
             }
@@ -167,50 +131,24 @@ namespace Travel_schedule
             try
             {
                 int StatusID = Convert.ToInt32(comboBox3.SelectedValue);
-                sqlDataAdapterObj = new SqlDataAdapter();
-                updateCommandObj = new SqlCommand();
-                sqlParameterObj = new SqlParameter("@Id",StatusID);
-                sqlParameterObj1 = new SqlParameter("@slno", SerialNumber);
-                updateCommandObj.Parameters.Add(sqlParameterObj);
-                updateCommandObj.Parameters.Add(sqlParameterObj1);
-                //MessageBox.Show(fromLocation + "   " + SerialNumber);
-                updateCommandObj.CommandText = "update LocalSchedule set StatusID = @Id where SerialNumber=@slno";
-                updateCommandObj.Connection = sqlConnectionObj;
-                sqlConnectionObj.Open();
-                updateCommandObj.ExecuteNonQuery();
-
+                ControllerObj.Button2Click(StatusID, SerialNumber);
             }
             catch (Exception ex) { }
             finally
             {
-                sqlConnectionObj.Close();
+                
                 dataGridView1.Refresh();
             }
         }
 
         public void Scheduledetails(int id)
         {
-            sqlDataAdapterObj = new SqlDataAdapter();
-            selectCommandObj = new SqlCommand();
-            selectCommandObj.CommandText = "SELECT LocalSchedule.SerialNumber,LocalSchedule.TravelID,LocalSchedule.Date,Status.State as Travel_State,l.Place as source ,l1.Place as  destination,LocalSchedule.DriverID from LocalSchedule,LocalTravelOptions l, LocalTravelOptions l1 ,Status where l.LocationID = LocalSchedule.FromLocalLocationID and l1.LocationID = LocalSchedule.ToLocalLocationID and LocalSchedule.TravelID = @Id and LocalSchedule.StatusID = Status.StatusID";
-            selectCommandObj.Connection = sqlConnectionObj;
-            sqlParameterObj = new SqlParameter("@Id", id);
-            selectCommandObj.Parameters.Add(sqlParameterObj);
-            sqlDataAdapterObj.SelectCommand = selectCommandObj;
-            dataSetObj = new DataSet();
-            sqlDataAdapterObj.Fill(dataSetObj);
+            dataSetObj = ControllerObj.Scheduledetails(id);
             dataGridView1.DataSource = dataSetObj.Tables[0];
         }
         public void loadFromLocation()
         {
-            sqlDataAdapterObj = new SqlDataAdapter();
-            selectCommandObj = new SqlCommand();
-            selectCommandObj.CommandText = "select LocationID,Place from LocalTravelOptions";
-            selectCommandObj.Connection = sqlConnectionObj;
-            sqlDataAdapterObj.SelectCommand = selectCommandObj;
-            dataSetObj = new DataSet();
-            sqlDataAdapterObj.Fill(dataSetObj);
-
+            dataSetObj = ControllerObj.loadFromLocation();
             comboBox1.DataSource = dataSetObj.Tables[0];
             comboBox1.DisplayMember = "Place";
             comboBox1.ValueMember = "LocationID";
@@ -223,14 +161,7 @@ namespace Travel_schedule
 
         public void loadToLocation()
         {
-            sqlDataAdapterObj = new SqlDataAdapter();
-            selectCommandObj = new SqlCommand();
-            selectCommandObj.CommandText = "select LocationID,Place from LocalTravelOptions";
-            selectCommandObj.Connection = sqlConnectionObj;
-            sqlDataAdapterObj.SelectCommand = selectCommandObj;
-            dataSetObj = new DataSet();
-            sqlDataAdapterObj.Fill(dataSetObj);
-
+            dataSetObj = ControllerObj.loadToLocation();
             comboBox2.DataSource = dataSetObj.Tables[0];
             comboBox2.DisplayMember = "Place";
             comboBox2.ValueMember = "LocationID";
@@ -243,14 +174,7 @@ namespace Travel_schedule
 
         public void loadStatus()
         {
-            sqlDataAdapterObj = new SqlDataAdapter();
-            selectCommandObj = new SqlCommand();
-            selectCommandObj.CommandText = "select StatusID,State from Status ";
-            selectCommandObj.Connection = sqlConnectionObj;
-            sqlDataAdapterObj.SelectCommand = selectCommandObj;
-            dataSetObj = new DataSet();
-            sqlDataAdapterObj.Fill(dataSetObj);
-
+            dataSetObj = ControllerObj.loadStatus();
             comboBox3.DataSource = dataSetObj.Tables[0];
             comboBox3.DisplayMember = "State";
             comboBox3.ValueMember = "StatusID";
@@ -263,13 +187,7 @@ namespace Travel_schedule
 
         public void loadDriver()
         {
-            sqlDataAdapterObj = new SqlDataAdapter();
-            selectCommandObj = new SqlCommand();
-            selectCommandObj.CommandText = "select DriverID,DriverName from DriverDetails ";
-            selectCommandObj.Connection = sqlConnectionObj;
-            sqlDataAdapterObj.SelectCommand = selectCommandObj;
-            dataSetObj = new DataSet();
-            sqlDataAdapterObj.Fill(dataSetObj);
+            dataSetObj = ControllerObj.loadDriver();
 
             comboBox4.DataSource = dataSetObj.Tables[0];
             comboBox4.DisplayMember = "DriverName";
@@ -280,15 +198,8 @@ namespace Travel_schedule
         {
             try
             {
-                sqlDataAdapterObj = new SqlDataAdapter();
-                selectCommandObj = new SqlCommand();
-                selectCommandObj.CommandText = "select LocationID,Place from LocalTravelOptions where @Id != LocationID ";
-                sqlParameterObj = new SqlParameter("@Id", comboBox1.SelectedValue);
-                selectCommandObj.Parameters.Add(sqlParameterObj);
-                selectCommandObj.Connection = sqlConnectionObj;
-                sqlDataAdapterObj.SelectCommand = selectCommandObj;
-                dataSetObj = new DataSet();
-                sqlDataAdapterObj.Fill(dataSetObj);
+                
+                dataSetObj = ControllerObj.placeFromValidation(Convert.ToInt32(comboBox1.SelectedValue));
                 comboBox2.DataSource = dataSetObj.Tables[0];
                 comboBox2.DisplayMember = "Place";
                 comboBox2.ValueMember = "LocationID";
@@ -299,15 +210,7 @@ namespace Travel_schedule
         {
             try
             {
-                sqlDataAdapterObj = new SqlDataAdapter();
-                selectCommandObj = new SqlCommand();
-                selectCommandObj.CommandText = "select LocationID,Place from LocalTravelOptions where @Id != LocationID ";
-                sqlParameterObj = new SqlParameter("@Id", comboBox2.SelectedValue);
-                selectCommandObj.Parameters.Add(sqlParameterObj);
-                selectCommandObj.Connection = sqlConnectionObj;
-                sqlDataAdapterObj.SelectCommand = selectCommandObj;
-                dataSetObj = new DataSet();
-                sqlDataAdapterObj.Fill(dataSetObj);
+                dataSetObj = ControllerObj.placeToValidation(Convert.ToInt32(comboBox2.SelectedValue));
                 comboBox1.DataSource = dataSetObj.Tables[0];
                 comboBox1.DisplayMember = "Place";
                 comboBox1.ValueMember = "LocationID";

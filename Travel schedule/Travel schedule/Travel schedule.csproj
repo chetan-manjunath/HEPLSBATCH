@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="contorllerEdit.cs" />
+    <Compile Include="controllerLocalschedule.cs" />
     <Compile Include="controllerlogin.cs" />
     <Compile Include="editmodel.cs" />
     <Compile Include="LocalTravelForm.cs">
