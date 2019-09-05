@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="controllerlogin.cs" />
     <Compile Include="LocalTravelForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -59,6 +60,7 @@
     <Compile Include="loginForm.Designer.cs">
       <DependentUpon>loginForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="loginModel.cs" />
     <Compile Include="LoiginFailureException.cs" />
     <Compile Include="menuForm.cs">
       <SubType>Form</SubType>

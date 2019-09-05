@@ -20,8 +20,8 @@ namespace Travel_schedule
         SqlDataAdapter dataAdapterObj, adapterObj1;
         SqlCommand selectCommand;
         SqlParameter parameterObj, parameterObj1;
-        DataSet  dataSetObj;
-
+        DataSet  dataSetObj1;
+        controllerlogin ObjLogin;
 
         public loginForm()
         {
@@ -30,17 +30,16 @@ namespace Travel_schedule
             connectionObj = new SqlConnection(@connectionString);
             menuForm MenuObj = new menuForm();
             textBox1.PasswordChar = '*';
+            ObjLogin = new controllerlogin();
             LoadUsernames();
-
+         
         }
         private void LoadUsernames()
         {
 
-            adapterObj1 = new SqlDataAdapter("select UserName from LoginCredentials", connectionObj);
-            dataSetObj = new DataSet();
-            adapterObj1.Fill(dataSetObj);
-
-            comboBox1.DataSource = dataSetObj.Tables[0];
+            dataSetObj1 = ObjLogin.LoadUsernames();
+            
+            comboBox1.DataSource = dataSetObj1.Tables[0];
             comboBox1.DisplayMember = "UserName";
             comboBox1.ValueMember = "UserName";
 
@@ -53,8 +52,9 @@ namespace Travel_schedule
             
             try
             {
-                
-                validateLogin();
+                loginModel LoginObj = new loginModel(comboBox1.SelectedValue.ToString(), textBox1.Text);
+                ObjLogin.validateLogin(LoginObj);
+                textBox1.Text = "";
                 this.Visible = false;
                 DialogResult dr = MenuObj.ShowDialog(this);
                 this.Visible = true;
@@ -64,55 +64,6 @@ namespace Travel_schedule
                 MessageBox.Show(s.Message);
             }
                 
-        }
-
-        private void validateLogin()
-        {
-            dataAdapterObj = new SqlDataAdapter();
-            selectCommand = new SqlCommand();
-            parameterObj = new SqlParameter("@Password", textBox1.Text);
-            selectCommand.Parameters.Add(parameterObj);
-            try
-            {
-                parameterObj1 = new SqlParameter("@Username", comboBox1.SelectedValue.ToString());
-                selectCommand.Parameters.Add(parameterObj1);
-            
-            connectionObj.Open();
-
-            selectCommand.CommandText = "select count(UserName) from LoginCredentials where UserName=@Username and Password=@Password";
-            selectCommand.Connection = connectionObj;
-            dataAdapterObj.SelectCommand = selectCommand;
-
-            dataSetObj = new DataSet();
-            dataAdapterObj.Fill(dataSetObj);
-            
-
-            var LoginStatus = (int)dataSetObj.Tables[0].Rows[0][0];
-            
-
-            connectionObj.Close();
-            if (LoginStatus <= 0)
-            {
-                throw new LoginFailureException("Incorrect Password... Please try again");
-            }
-            else
-            {
-                MessageBox.Show("Login Success");
-                textBox1.Text = "";
-            }
-            }
-            catch (LoginFailureException e)
-            {
-
-                throw new LoginFailureException(e.Message);
-            }
-
-            catch (Exception e)
-            {
-                
-                throw new LoginFailureException("Select  a valid user name please dont enter");
-            }
-
         }
 
         private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
