@@ -65,13 +65,11 @@ namespace Travel_schedule
         private void DateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
             
-            //arrivalDate = Convert.ToDateTime(dateTimePicker1.Value);
         }
 
         private void DateTimePicker2_ValueChanged(object sender, EventArgs e)
         {
-            
-            //depatureDate = Convert.ToDateTime(dateTimePicker2.Value);
+       
         }
 
         private void EditForm_Load(object sender, EventArgs e)
