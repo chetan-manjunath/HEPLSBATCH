@@ -47,7 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="contorllerEdit.cs" />
     <Compile Include="controllerlogin.cs" />
+    <Compile Include="editmodel.cs" />
     <Compile Include="LocalTravelForm.cs">
       <SubType>Form</SubType>
     </Compile>

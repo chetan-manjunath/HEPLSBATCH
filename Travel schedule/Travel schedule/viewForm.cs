@@ -26,9 +26,9 @@ namespace Travel_schedule
             var connectionString = ConfigurationManager.ConnectionStrings["TravelScheduleDB"].ConnectionString;
             sqlConnectionobj = new SqlConnection(@connectionString);
 
-          //  LoadStatusIntoDropDown();
-            //LoadTimePeriodIntoDropDown();
-           // LoadPlaceIntoDropDown();
+            LoadStatusIntoDropDown();
+            LoadTimePeriodIntoDropDown();
+            LoadPlaceIntoDropDown();
         }
 
 
@@ -60,12 +60,12 @@ namespace Travel_schedule
             if (selectedPeriod == "Week")
             {
                 
-                selectCommandObj.CommandText = "select  EmployeeTravelDetails.TravelID, EmployeeDetails.EmployeeID,EmployeeDetails.EmployeeName,EmployeeTravelDetails.ArrivalDate,EmployeeTravelDetails.DepartureDate from EmployeeDetails,EmployeeTravelDetails where EmployeeDetails.EmployeeID=EmployeeTravelDetails.EmployeeID and EmployeeTravelDetails.ArrivalDate-GETDATE() between 0 and 7 and EmployeeTravelDetails.DepartureDate-GETDATE() between 0 and 7";
+                selectCommandObj.CommandText = "select  EmployeeTravelDetails.TravelID, EmployeeDetails.EmployeeID,EmployeeDetails.EmployeeName,EmployeeTravelDetails.ArrivalDate,EmployeeTravelDetails.DepartureDate from EmployeeDetails,EmployeeTravelDetails where EmployeeDetails.EmployeeID=EmployeeTravelDetails.EmployeeID and (EmployeeTravelDetails.ArrivalDate-GETDATE() between 0 and 7 or EmployeeTravelDetails.DepartureDate-GETDATE() between 0 and 7)";
              }
             else
             {
                 
-                selectCommandObj.CommandText = "select  EmployeeTravelDetails.TravelID, EmployeeDetails.EmployeeID,EmployeeDetails.EmployeeName,EmployeeTravelDetails.ArrivalDate,EmployeeTravelDetails.DepartureDate from EmployeeDetails,EmployeeTravelDetails where EmployeeDetails.EmployeeID=EmployeeTravelDetails.EmployeeID and EmployeeTravelDetails.ArrivalDate-GETDATE() between 0 and 30 and EmployeeTravelDetails.DepartureDate-GETDATE() between 0 and 30";
+                selectCommandObj.CommandText = "select  EmployeeTravelDetails.TravelID, EmployeeDetails.EmployeeID,EmployeeDetails.EmployeeName,EmployeeTravelDetails.ArrivalDate,EmployeeTravelDetails.DepartureDate from EmployeeDetails,EmployeeTravelDetails where EmployeeDetails.EmployeeID=EmployeeTravelDetails.EmployeeID and (EmployeeTravelDetails.ArrivalDate-GETDATE() between 0 and 30 or EmployeeTravelDetails.DepartureDate-GETDATE() between 0 and 30)";
             }
             
             selectCommandObj.Connection = sqlConnectionobj;
@@ -80,17 +80,17 @@ namespace Travel_schedule
         private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
-            //sqlDataAdapterObj = new SqlDataAdapter();
-            //selectCommandObj = new SqlCommand();
-            //selectCommandObj.CommandText = "select EmployeeTravelDetails.TravelID,EmployeeTravelDetails.EmployeeID,EmployeeTravelDetails.ArrivalDate,EmployeeTravelDetails.DepartureDate,s.State,p1.Placename as Source,P.PlaceName as Destination from EmployeeTravelDetails, Places P,Places p1, Status s where EmployeeTravelDetails. StatusID=@state and EmployeeTravelDetails.ToPlaceID = P.PlaceID and EmployeeTravelDetails.FromPlaceID = p1.PlaceID and EmployeeTravelDetails.StatusID = s.StatusID";
-            //selectCommandObj.Connection = sqlConnectionobj;
+            sqlDataAdapterObj = new SqlDataAdapter();
+            selectCommandObj = new SqlCommand();
+            selectCommandObj.CommandText = "select EmployeeTravelDetails.TravelID,EmployeeTravelDetails.EmployeeID,EmployeeTravelDetails.ArrivalDate,EmployeeTravelDetails.DepartureDate,s.State,p1.Placename as Source,P.PlaceName as Destination from EmployeeTravelDetails, Places P,Places p1, Status s where EmployeeTravelDetails. StatusID=@state and EmployeeTravelDetails.ToPlaceID = P.PlaceID and EmployeeTravelDetails.FromPlaceID = p1.PlaceID and EmployeeTravelDetails.StatusID = s.StatusID";
+            selectCommandObj.Connection = sqlConnectionobj;
 
-            //sqlParameterObj1 = new SqlParameter("@state", comboBox1.SelectedValue);
-            //selectCommandObj.Parameters.Add(sqlParameterObj1);
-            //sqlDataAdapterObj.SelectCommand = selectCommandObj;
-            //dataSetObj = new DataSet();
-            //sqlDataAdapterObj.Fill(dataSetObj);
-            //dataGridView1.DataSource = dataSetObj.Tables[0]; 
+            sqlParameterObj1 = new SqlParameter("@state", comboBox1.SelectedValue);
+            selectCommandObj.Parameters.Add(sqlParameterObj1);
+            sqlDataAdapterObj.SelectCommand = selectCommandObj;
+            dataSetObj = new DataSet();
+            sqlDataAdapterObj.Fill(dataSetObj);
+            dataGridView1.DataSource = dataSetObj.Tables[0]; 
  
 
         }
