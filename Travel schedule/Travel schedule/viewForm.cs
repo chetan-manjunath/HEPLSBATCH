@@ -19,13 +19,13 @@ namespace Travel_schedule
         SqlDataAdapter sqlDataAdapterObj, sqlDataAdapterObj1;
         DataSet dataSetObj;
         SqlParameter sqlParameterObj1; //sqlParameterObj2, sqlParameterObj3, sqlParameterObj4, sqlParameterObj5, sqlParameterObj6;
-                                       //  DataView dataViewObj;
+        ViewController controllerObj;                        //  DataView dataViewObj;
         public viewForm()
         {
             InitializeComponent();
             var connectionString = ConfigurationManager.ConnectionStrings["TravelScheduleDB"].ConnectionString;
             sqlConnectionobj = new SqlConnection(@connectionString);
-
+            controllerObj = new ViewController();
             LoadStatusIntoDropDown();
             LoadTimePeriodIntoDropDown();
             LoadPlaceIntoDropDown();
@@ -34,17 +34,9 @@ namespace Travel_schedule
 
         private void ComboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            sqlDataAdapterObj = new SqlDataAdapter();
-            selectCommandObj = new SqlCommand();
-            selectCommandObj.CommandText = "select EmployeeTravelDetails.TravelID,EmployeeTravelDetails.EmployeeID,EmployeeTravelDetails.ArrivalDate,EmployeeTravelDetails.DepartureDate,s.State,p1.Placename as Source,P.PlaceName as Destination from EmployeeTravelDetails, Places P,Places p1, Status s where EmployeeTravelDetails.ToPlaceID = @placename and EmployeeTravelDetails.ToPlaceID = P.PlaceID and EmployeeTravelDetails.FromPlaceID = p1.PlaceID and EmployeeTravelDetails.StatusID = s.StatusID";
-            
-            selectCommandObj.Connection = sqlConnectionobj;
-
-            sqlParameterObj1 = new SqlParameter("@placename", comboBox3.SelectedValue);
-            selectCommandObj.Parameters.Add(sqlParameterObj1);
-            sqlDataAdapterObj.SelectCommand = selectCommandObj;
-            dataSetObj = new DataSet();
-            sqlDataAdapterObj.Fill(dataSetObj);
+            PlacesModel placesObj = new PlacesModel(comboBox3.SelectedValue.ToString());
+            controllerObj = new ViewController();
+            dataSetObj = controllerObj.travelEmployee(placesObj);
             dataGridView1.DataSource = dataSetObj.Tables[0];
 
         }
@@ -52,26 +44,10 @@ namespace Travel_schedule
         
         private void ComboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            sqlDataAdapterObj = new SqlDataAdapter();
-            selectCommandObj = new SqlCommand();
-            string selectedPeriod =Convert.ToString(comboBox2.SelectedValue);
+            var selectedPeriod =(string)comboBox2.SelectedValue;
+            controllerObj = new ViewController();
+            dataSetObj =  controllerObj.FilterPeriod(selectedPeriod);
             
-            
-            if (selectedPeriod == "Week")
-            {
-                
-                selectCommandObj.CommandText = "select  EmployeeTravelDetails.TravelID, EmployeeDetails.EmployeeID,EmployeeDetails.EmployeeName,EmployeeTravelDetails.ArrivalDate,EmployeeTravelDetails.DepartureDate from EmployeeDetails,EmployeeTravelDetails where EmployeeDetails.EmployeeID=EmployeeTravelDetails.EmployeeID and (EmployeeTravelDetails.ArrivalDate-GETDATE() between 0 and 7 or EmployeeTravelDetails.DepartureDate-GETDATE() between 0 and 7)";
-             }
-            else
-            {
-                
-                selectCommandObj.CommandText = "select  EmployeeTravelDetails.TravelID, EmployeeDetails.EmployeeID,EmployeeDetails.EmployeeName,EmployeeTravelDetails.ArrivalDate,EmployeeTravelDetails.DepartureDate from EmployeeDetails,EmployeeTravelDetails where EmployeeDetails.EmployeeID=EmployeeTravelDetails.EmployeeID and (EmployeeTravelDetails.ArrivalDate-GETDATE() between 0 and 30 or EmployeeTravelDetails.DepartureDate-GETDATE() between 0 and 30)";
-            }
-            
-            selectCommandObj.Connection = sqlConnectionobj;
-            sqlDataAdapterObj.SelectCommand = selectCommandObj;
-            dataSetObj = new DataSet();
-            sqlDataAdapterObj.Fill(dataSetObj);
             dataGridView1.DataSource = dataSetObj.Tables[0];
         }
 
@@ -80,31 +56,17 @@ namespace Travel_schedule
         private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
-            sqlDataAdapterObj = new SqlDataAdapter();
-            selectCommandObj = new SqlCommand();
-            selectCommandObj.CommandText = "select EmployeeTravelDetails.TravelID,EmployeeTravelDetails.EmployeeID,EmployeeTravelDetails.ArrivalDate,EmployeeTravelDetails.DepartureDate,s.State,p1.Placename as Source,P.PlaceName as Destination from EmployeeTravelDetails, Places P,Places p1, Status s where EmployeeTravelDetails. StatusID=@state and EmployeeTravelDetails.ToPlaceID = P.PlaceID and EmployeeTravelDetails.FromPlaceID = p1.PlaceID and EmployeeTravelDetails.StatusID = s.StatusID";
-            selectCommandObj.Connection = sqlConnectionobj;
+            var value = comboBox1.SelectedValue.ToString();
+            dataSetObj= controllerObj.employeestate(value);
+            dataGridView1.DataSource = dataSetObj.Tables[0];
 
-            sqlParameterObj1 = new SqlParameter("@state", comboBox1.SelectedValue);
-            selectCommandObj.Parameters.Add(sqlParameterObj1);
-            sqlDataAdapterObj.SelectCommand = selectCommandObj;
-            dataSetObj = new DataSet();
-            sqlDataAdapterObj.Fill(dataSetObj);
-            dataGridView1.DataSource = dataSetObj.Tables[0]; 
- 
 
         }
 
     private void Button1_Click(object sender, EventArgs e)
         {
-            sqlDataAdapterObj1 = new SqlDataAdapter();
-            sqlDataAdapterObj1.SelectCommand = new SqlCommand();
-            sqlDataAdapterObj1.SelectCommand.CommandText = "select EmployeeTravelDetails.TravelID,EmployeeTravelDetails.EmployeeID,EmployeeTravelDetails.ArrivalDate,EmployeeTravelDetails.DepartureDate,s.State,p1.Placename as Source,P.PlaceName as Destination from EmployeeTravelDetails, Places P,Places p1, Status s where EmployeeTravelDetails.ToPlaceID = P.PlaceID and EmployeeTravelDetails.FromPlaceID = p1.PlaceID and EmployeeTravelDetails.StatusID = s.StatusID";
-
-            sqlDataAdapterObj1.SelectCommand.Connection = sqlConnectionobj;
-
-            dataSetObj = new DataSet();
-            sqlDataAdapterObj1.Fill(dataSetObj);
+            controllerObj = new ViewController();
+            dataSetObj = controllerObj.ViewEmployeeTravelDetails();
             dataGridView1.DataSource = dataSetObj.Tables[0];
         }
 
@@ -116,9 +78,8 @@ namespace Travel_schedule
         }
         private void LoadStatusIntoDropDown()
         {
-            sqlDataAdapterObj = new SqlDataAdapter("select state,StatusID from Status ", sqlConnectionobj);
-            dataSetObj = new DataSet();
-            sqlDataAdapterObj.Fill(dataSetObj);
+            controllerObj = new ViewController();
+            dataSetObj = controllerObj.LoadStatusIntoDropDown();
 
             comboBox1.DataSource = dataSetObj.Tables[0];
             comboBox1.DisplayMember = "State";
@@ -127,9 +88,8 @@ namespace Travel_schedule
         }
         private void LoadTimePeriodIntoDropDown()
         {
-            sqlDataAdapterObj = new SqlDataAdapter("select distinct VisitDuration from Period ", sqlConnectionobj);
-            dataSetObj = new DataSet();
-            sqlDataAdapterObj.Fill(dataSetObj);
+            controllerObj = new ViewController();
+            dataSetObj = controllerObj.LoadTimePeriodIntoDropDown();
 
             comboBox2.DataSource = dataSetObj.Tables[0];
             comboBox2.DisplayMember = "VisitDuration";
@@ -138,16 +98,10 @@ namespace Travel_schedule
 
         private void DataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            sqlDataAdapterObj = new SqlDataAdapter();
-            selectCommandObj = new SqlCommand();
-            selectCommandObj.CommandText = "select LocalSchedule.SerialNumber,LocalSchedule.Date,Status.State as Travel_state,l1.Place source,l2.Place destination,DriverDetails.DriverName from LocalSchedule,DriverDetails,LocalTravelOptions l1,LocalTravelOptions l2,Status where TravelID=@employeeid and DriverDetails.DriverID=LocalSchedule.DriverID and l1.LocationID=LocalSchedule.FromLocalLocationID and l2.LocationID=LocalSchedule.ToLocalLocationID and Status.StatusID=LocalSchedule.StatusID and LocalSchedule.DriverID=DriverDetails.DriverID";
-            selectCommandObj.Connection = sqlConnectionobj;
-            sqlParameterObj1 = new SqlParameter("@employeeid", dataGridView1.Rows[e.RowIndex].Cells[0].FormattedValue.ToString());
-            selectCommandObj.Parameters.Add(sqlParameterObj1);
-            sqlDataAdapterObj.SelectCommand = selectCommandObj;
 
-            dataSetObj = new DataSet();
-            sqlDataAdapterObj.Fill(dataSetObj);
+            var value = dataGridView1.Rows[e.RowIndex].Cells[0].FormattedValue.ToString();
+            controllerObj = new ViewController();
+             dataSetObj =  controllerObj.localTravel(value);
             dataGridView2.DataSource = dataSetObj.Tables[0];
 
         }
@@ -159,9 +113,8 @@ namespace Travel_schedule
 
         private void LoadPlaceIntoDropDown()
         {
-            sqlDataAdapterObj = new SqlDataAdapter("select  PlaceName,PlaceID from Places ", sqlConnectionobj);
-            dataSetObj = new DataSet();
-            sqlDataAdapterObj.Fill(dataSetObj);
+            controllerObj = new ViewController();
+            dataSetObj = controllerObj.LoadPlaceIntoDropDown();
 
             comboBox3.DataSource = dataSetObj.Tables[0];
             comboBox3.DisplayMember = "PlaceName";

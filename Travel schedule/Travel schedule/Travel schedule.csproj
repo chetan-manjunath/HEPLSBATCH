@@ -77,6 +77,8 @@
     <Compile Include="AddForm.Designer.cs">
       <DependentUpon>AddForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PlacesModel.cs" />
+    <Compile Include="ViewController.cs" />
     <Compile Include="viewForm.cs">
       <SubType>Form</SubType>
     </Compile>
