@@ -99,7 +99,7 @@ namespace Travel_schedule
         {
             sqlDataAdapterObj1 = new SqlDataAdapter();
             sqlDataAdapterObj1.SelectCommand = new SqlCommand();
-            sqlDataAdapterObj1.SelectCommand.CommandText = "select TravelID,EmployeeID,ArrivalDate,DepartureDate,StatusID,FromPlaceID,ToPlaceID from EmployeeTravelDetails";
+            sqlDataAdapterObj1.SelectCommand.CommandText = "select EmployeeTravelDetails.TravelID,EmployeeTravelDetails.EmployeeID,EmployeeTravelDetails.ArrivalDate,EmployeeTravelDetails.DepartureDate,s.State,p1.Placename as Source,P.PlaceName as Destination from EmployeeTravelDetails, Places P,Places p1, Status s where EmployeeTravelDetails.ToPlaceID = P.PlaceID and EmployeeTravelDetails.FromPlaceID = p1.PlaceID and EmployeeTravelDetails.StatusID = s.StatusID";
 
             sqlDataAdapterObj1.SelectCommand.Connection = sqlConnectionobj;
 
